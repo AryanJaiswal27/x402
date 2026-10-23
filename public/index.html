@@ -46,13 +46,17 @@
             <i data-lucide="bot"></i>
           </div>
           <div class="wallet-details">
-            <div class="wallet-label">AGENT SMART ACCOUNT</div>
+            <div class="wallet-label">AGENT ACCOUNT (<span class="mono" id="topNavAddrShort">0x6c71...71f3</span>)</div>
             <div class="wallet-balance" id="topNavBalance">5.0000 USDC</div>
           </div>
           <button class="faucet-mini-btn" id="topNavFaucetBtn" title="Request Testnet USDC Faucet">
             <i data-lucide="plus-circle"></i> Faucet
           </button>
         </div>
+
+        <button class="btn btn-secondary" id="btnConnectMetaMask" style="border-radius: var(--radius-full); padding: 0.4rem 0.8rem; font-size: 0.78rem;">
+          <i data-lucide="wallet"></i> <span id="metaMaskBtnLabel">MetaMask Connected</span>
+        </button>
       </div>
     </div>
   </header>

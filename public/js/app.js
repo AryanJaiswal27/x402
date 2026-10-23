@@ -9,7 +9,7 @@ const state = {
   missions: [],
   selectedMissionId: null,
   isMissionRunning: false,
-  agentWallet: '0x71C5696543ae25536F2dE4532B94A42B76a66402',
+  agentWallet: '0x6c7124c77F42EcdaAE9aE5849838C8994fE271f3',
   agentBalance: 5.000,
   inspector: {
     selectedService: null,
@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupModals();
   setupInspectorEvents();
   setupMissionEvents();
+  setupMetaMask();
 
   // Load initial backend state
   await Promise.all([
@@ -97,6 +98,10 @@ async function fetchStats() {
       document.getElementById('heroAgentBalance').textContent = balStr;
       document.getElementById('ledgerAgentBal').textContent = balStr;
       document.getElementById('ledgerAgentAddr').textContent = `${data.stats.agentWallet.slice(0, 8)}...${data.stats.agentWallet.slice(-4)}`;
+      const shortAddrEl = document.getElementById('topNavAddrShort');
+      if (shortAddrEl) {
+        shortAddrEl.textContent = `${data.stats.agentWallet.slice(0, 6)}...${data.stats.agentWallet.slice(-4)}`;
+      }
 
       document.getElementById('totalSettlementsCounter').textContent = data.stats.totalSettlements;
       document.getElementById('ledgerTotalTx').textContent = data.stats.totalSettlements;
@@ -693,6 +698,43 @@ function setupModals() {
   document.getElementById('btnRefreshLedger').addEventListener('click', async () => {
     await Promise.all([fetchStats(), fetchTransactions()]);
     showToast('Ledger data updated', 'info');
+  });
+}
+
+// --------------------------------------------------------------------------
+// MetaMask Web3 Integration
+// --------------------------------------------------------------------------
+
+function setupMetaMask() {
+  const btn = document.getElementById('btnConnectMetaMask');
+  const label = document.getElementById('metaMaskBtnLabel');
+  if (!btn) return;
+
+  const updateWithAddress = (addr) => {
+    state.agentWallet = addr;
+    if (label) label.textContent = `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+    const shortAddrEl = document.getElementById('topNavAddrShort');
+    if (shortAddrEl) shortAddrEl.textContent = `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+    document.getElementById('ledgerAgentAddr').textContent = `${addr.slice(0, 8)}...${addr.slice(-4)}`;
+  };
+
+  // Initial display with user's verified address
+  updateWithAddress(state.agentWallet);
+
+  btn.addEventListener('click', async () => {
+    if (window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        if (accounts && accounts.length > 0) {
+          updateWithAddress(accounts[0]);
+          showToast(`MetaMask Connected: ${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`, 'success');
+        }
+      } catch (err) {
+        showToast(err.message || 'MetaMask connection rejected', 'error');
+      }
+    } else {
+      showToast(`Active Account: ${state.agentWallet}`, 'info');
+    }
   });
 }
 

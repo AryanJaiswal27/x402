@@ -64,7 +64,7 @@ async function runTest() {
   const paymentPayload = {
     version: '1.0',
     challengeId: challenge.id,
-    payer: '0x71C5696543ae25536F2dE4532B94A42B76a66402',
+    payer: '0x6c7124c77F42EcdaAE9aE5849838C8994fE271f3',
     amount: challenge.amount,
     signature: '0xmockSignature' + Math.random().toString(36).substring(2),
     timestamp: Date.now()

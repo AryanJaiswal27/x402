@@ -1,8 +1,8 @@
 const crypto = require('crypto');
 
-// Default Simulated Agent Wallet & Provider Wallets
-const DEFAULT_AGENT_WALLET = '0x71C5696543ae25536F2dE4532B94A42B76a66402';
-const PLATFORM_FACILITATOR = '0x4029D8872bF00cA2343E65B9e01103D3b1F89402';
+// User's MetaMask Agent Account & Platform Facilitator
+const DEFAULT_AGENT_WALLET = '0x6c7124c77F42EcdaAE9aE5849838C8994fE271f3';
+const PLATFORM_FACILITATOR = '0x6c7124c77F42EcdaAE9aE5849838C8994fE271f3';
 
 class PaymentLedger {
   constructor() {

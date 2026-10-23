@@ -1,5 +1,7 @@
 # ⚡ Synapse402 — Autonomous Agent Micropayment Mesh
 > **An Internet-Native M2M Micropayment Infrastructure powered by the x402 (HTTP 402 "Payment Required") Open Standard on Base Sepolia.**
+> 
+> **👤 Developer / Author MetaMask ETH Address:** `0x6c7124c77F42EcdaAE9aE5849838C8994fE271f3`
 
 ---
 
