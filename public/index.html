@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synapse402 — Autonomous Agent Micropayment Mesh (HTTP 402 Standard)</title>
+  <meta name="description" content="Decentralized machine-to-machine micropayment infrastructure for autonomous AI agents, powered by the open x402 HTTP standard on Base Sepolia.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="dark-theme">
+  <!-- Ambient Glow Effects -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Main Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-logo">
+          <span class="logo-badge">402</span>
+        </div>
+        <div class="brand-info">
+          <div class="brand-title">
+            <span class="gradient-text">SYNAPSE</span><span class="brand-accent">402</span>
+            <span class="protocol-chip">x402-v1.0</span>
+          </div>
+          <span class="brand-subtitle">Autonomous Agent Micropayments Protocol</span>
+        </div>
+      </div>
+
+      <!-- Network & Agent Wallet Status Pill -->
+      <div class="header-actions">
+        <div class="network-badge">
+          <span class="pulse-beacon"></span>
+          <span class="network-name">Base Sepolia (84532)</span>
+        </div>
+
+        <div class="wallet-pill" id="agentWalletPill">
+          <div class="wallet-icon-wrapper">
+            <i data-lucide="bot"></i>
+          </div>
+          <div class="wallet-details">
+            <div class="wallet-label">AGENT SMART ACCOUNT</div>
+            <div class="wallet-balance" id="topNavBalance">5.0000 USDC</div>
+          </div>
+          <button class="faucet-mini-btn" id="topNavFaucetBtn" title="Request Testnet USDC Faucet">
+            <i data-lucide="plus-circle"></i> Faucet
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <div class="nav-tabs" role="tablist">
+        <button class="nav-tab active" data-tab="swarm" id="tab-swarm">
+          <i data-lucide="sparkles"></i> Autonomous Swarm Mission
+        </button>
+        <button class="nav-tab" data-tab="inspector" id="tab-inspector">
+          <i data-lucide="cpu"></i> x402 Protocol Inspector
+        </button>
+        <button class="nav-tab" data-tab="marketplace" id="tab-marketplace">
+          <i data-lucide="layers"></i> API Mesh Marketplace
+        </button>
+        <button class="nav-tab" data-tab="ledger" id="tab-ledger">
+          <i data-lucide="activity"></i> On-Chain Settlement Ledger
+        </button>
+        <button class="nav-tab" data-tab="sdk" id="tab-sdk">
+          <i data-lucide="code-2"></i> Developer SDK
+        </button>
+      </div>
+
+      <div class="nav-metrics">
+        <div class="metric-compact">
+          <span class="metric-dim">Total Settlements:</span>
+          <span class="metric-bold" id="totalSettlementsCounter">--</span>
+        </div>
+        <div class="metric-compact">
+          <span class="metric-dim">Total Volume:</span>
+          <span class="metric-bold accent-cyan" id="totalVolumeCounter">-- USDC</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+
+    <!-- TAB 1: AUTONOMOUS SWARM MISSION CONTROLLER -->
+    <section class="tab-pane active" id="pane-swarm">
+      <div class="hero-banner">
+        <div class="hero-content">
+          <div class="hero-tag">
+            <i data-lucide="zap"></i> AGENTIC MACHINE-TO-MACHINE COMMERCE
+          </div>
+          <h1>Autonomous AI Agent <span class="gradient-text">Mission Swarm</span></h1>
+          <p>
+            AI agents cannot use credit cards or monthly subscriptions. With <strong>x402</strong>, an autonomous agent discovers paywalled APIs, receives HTTP 402 challenges, signs micro-transactions autonomously, and synthesizes multi-source intelligence in milliseconds.
+          </p>
+        </div>
+
+        <div class="hero-stats-card">
+          <div class="hero-stat">
+            <div class="hero-stat-val" id="heroAgentBalance">5.0000 USDC</div>
+            <div class="hero-stat-lbl">Agent Spending Reserve</div>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <div class="hero-stat-val">38ms</div>
+            <div class="hero-stat-lbl">Avg Settlement Latency</div>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <div class="hero-stat-val">0.0001 USDC</div>
+            <div class="hero-stat-lbl">Base L2 Gas Overhead</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mission-grid">
+        <!-- Left: Mission Selection & Controls -->
+        <div class="panel mission-controls-panel">
+          <div class="panel-header">
+            <h3><i data-lucide="crosshair"></i> Select Mission Dossier</h3>
+            <span class="badge badge-purple">3 Available</span>
+          </div>
+          
+          <div class="mission-cards-list" id="missionCardsList">
+            <!-- Dynamically populated -->
+          </div>
+
+          <div class="mission-action-footer">
+            <div class="agent-auth-mode">
+              <span class="auth-dot"></span>
+              <span>Autonomous Signing: <strong>Active (EIP-712 Session Key)</strong></span>
+            </div>
+            <button class="btn btn-primary btn-large" id="btnLaunchMission">
+              <i data-lucide="play"></i> Launch Autonomous Agent Mission
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Real-time Mission Execution Console & Unlocked Dossier -->
+        <div class="panel mission-console-panel">
+          <div class="panel-header">
+            <div class="console-title">
+              <i data-lucide="terminal"></i> Autonomous Execution Log & Protocol Handshake
+            </div>
+            <div class="console-status" id="consoleStatus">
+              <span class="status-indicator ready"></span> Ready
+            </div>
+          </div>
+
+          <!-- Execution Timeline -->
+          <div class="timeline-container" id="missionTimeline">
+            <div class="empty-timeline-state">
+              <i data-lucide="bot" class="empty-icon"></i>
+              <h4>Awaiting Mission Launch</h4>
+              <p>Select a mission dossier on the left and click "Launch Autonomous Agent Mission". Watch the AI Agent autonomously negotiate HTTP 402 payment challenges and stream decrypted payloads.</p>
+            </div>
+          </div>
+
+          <!-- Unlocked Mission Result Display -->
+          <div class="unlocked-dossier" id="unlockedDossier" style="display: none;">
+            <div class="dossier-header">
+              <div class="dossier-title">
+                <i data-lucide="file-check"></i> Synthesized Executive Dossier
+              </div>
+              <span class="badge badge-green" id="dossierSpentBadge">Spent: 0.000 USDC</span>
+            </div>
+            <div class="dossier-body" id="dossierBody"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: x402 PROTOCOL INSPECTOR -->
+    <section class="tab-pane" id="pane-inspector">
+      <div class="inspector-header">
+        <div>
+          <h2><i data-lucide="microscope"></i> Interactive x402 Protocol Inspector</h2>
+          <p class="section-desc">Experience the exact 2-step HTTP 402 challenge-response handshake as defined by the Linux Foundation & Coinbase x402 standard.</p>
+        </div>
+      </div>
+
+      <div class="inspector-layout">
+        <!-- Left: Endpoint Selector & Request Configurator -->
+        <div class="panel inspector-config-panel">
+          <div class="panel-header">
+            <h3>Target x402 Endpoint</h3>
+          </div>
+          
+          <div class="form-group">
+            <label>Select Monetized Service:</label>
+            <select id="inspectorEndpointSelect" class="form-select">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+
+          <div class="endpoint-meta-card" id="inspectorEndpointMeta">
+            <div class="meta-row">
+              <span class="meta-lbl">HTTP Method:</span>
+              <span class="badge badge-blue">GET</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-lbl">Unit Price:</span>
+              <span class="meta-val highlight" id="inspectorMetaPrice">0.008 USDC</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-lbl">Provider Payee:</span>
+              <span class="meta-val mono" id="inspectorMetaPayee">0x88402...</span>
+            </div>
+          </div>
+
+          <div class="handshake-actions">
+            <h4>Execute Handshake Steps</h4>
+            
+            <button class="step-btn" id="btnInspectorStep1">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <strong>Step 1: Send Raw GET Request</strong>
+                <span>Expects HTTP 402 with WWW-Authenticate & Challenge</span>
+              </div>
+            </button>
+
+            <button class="step-btn disabled" id="btnInspectorStep2" disabled>
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <strong>Step 2: Sign Payment Voucher</strong>
+                <span>Agent wallet cryptographic signature (EIP-712)</span>
+              </div>
+            </button>
+
+            <button class="step-btn disabled" id="btnInspectorStep3" disabled>
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <strong>Step 3: Retry with X-Payment Header</strong>
+                <span>Expects HTTP 200 OK + X-Payment-Receipt + Data</span>
+              </div>
+            </button>
+
+            <button class="btn btn-secondary btn-full" id="btnInspectorReset">
+              <i data-lucide="rotate-ccw"></i> Reset Handshake
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Live HTTP Traffic & Cryptographic Inspector -->
+        <div class="panel inspector-terminal-panel">
+          <div class="panel-header">
+            <div class="tab-mini-group">
+              <button class="tab-mini active" data-view="http">HTTP Wire Trace</button>
+              <button class="tab-mini" data-view="crypto">EIP-712 Signature</button>
+              <button class="tab-mini" data-view="receipt">On-Chain Receipt</button>
+            </div>
+            <span class="handshake-stage-badge" id="handshakeStageBadge">AWAITING STEP 1</span>
+          </div>
+
+          <div class="terminal-body" id="inspectorTerminal">
+            <div class="code-terminal-pre">
+<span class="comment">// Welcome to the Synapse402 Protocol Inspector.</span>
+<span class="comment">// Click "Step 1: Send Raw GET Request" on the left to initiate the x402 challenge.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: API MESH MARKETPLACE -->
+    <section class="tab-pane" id="pane-marketplace">
+      <div class="marketplace-header">
+        <div>
+          <h2><i data-lucide="store"></i> x402 Service Mesh Marketplace</h2>
+          <p class="section-desc">Monetize any API, model, or dataset per-call with zero subscriptions, accounts, or API keys.</p>
+        </div>
+        <button class="btn btn-primary" id="btnOpenPublishModal">
+          <i data-lucide="plus"></i> Publish x402 Endpoint
+        </button>
+      </div>
+
+      <div class="marketplace-grid" id="marketplaceGrid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 4: ON-CHAIN SETTLEMENT LEDGER -->
+    <section class="tab-pane" id="pane-ledger">
+      <div class="ledger-header">
+        <div>
+          <h2><i data-lucide="activity"></i> Base Sepolia Settlement Ledger</h2>
+          <p class="section-desc">Real-time cryptographic audit log of all agentic micro-transactions settled on Base L2.</p>
+        </div>
+        <div class="ledger-actions">
+          <button class="btn btn-secondary" id="btnRefreshLedger">
+            <i data-lucide="refresh-cw"></i> Refresh
+          </button>
+          <button class="btn btn-primary" id="btnOpenFaucetModal">
+            <i data-lucide="coins"></i> Top Up Agent Wallet
+          </button>
+        </div>
+      </div>
+
+      <!-- Ledger Summary Cards -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon-wrap cyan"><i data-lucide="wallet"></i></div>
+          <div class="stat-content">
+            <div class="stat-title">Agent Wallet Balance</div>
+            <div class="stat-number" id="ledgerAgentBal">5.0000 USDC</div>
+            <div class="stat-sub mono" id="ledgerAgentAddr">0x71C5...6402</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap purple"><i data-lucide="arrow-left-right"></i></div>
+          <div class="stat-content">
+            <div class="stat-title">Total Settled Requests</div>
+            <div class="stat-number" id="ledgerTotalTx">--</div>
+            <div class="stat-sub">HTTP 402 Conversions: 100%</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap green"><i data-lucide="zap"></i></div>
+          <div class="stat-content">
+            <div class="stat-title">Gross Mesh Volume</div>
+            <div class="stat-number" id="ledgerGrossVol">-- USDC</div>
+            <div class="stat-sub">Network: Base Sepolia (84532)</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap amber"><i data-lucide="blocks"></i></div>
+          <div class="stat-content">
+            <div class="stat-title">Latest Block Height</div>
+            <div class="stat-number" id="ledgerBlockNum">#19482100</div>
+            <div class="stat-sub">Avg Gas: 0.0001 USDC</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transactions Table -->
+      <div class="panel table-panel">
+        <div class="panel-header">
+          <h3>Settled Micropayments Stream</h3>
+          <span class="badge badge-cyan">Real-time Feed</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Tx Hash</th>
+                <th>Block</th>
+                <th>Service Name</th>
+                <th>Payer Wallet</th>
+                <th>Amount</th>
+                <th>Latency</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: DEVELOPER SDK & DOCS -->
+    <section class="tab-pane" id="pane-sdk">
+      <div class="sdk-header">
+        <div>
+          <h2><i data-lucide="file-code"></i> Developer Integration & x402 SDK</h2>
+          <p class="section-desc">Integrate x402 client-side in your AI Agent, or protect your backend endpoints in under 3 lines of code.</p>
+        </div>
+      </div>
+
+      <div class="sdk-grid">
+        <!-- Client SDK Integration -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3><i data-lucide="bot"></i> Client Side: Autonomous Agent Fetch Wrapper</h3>
+            <span class="badge badge-purple">TypeScript / Python</span>
+          </div>
+          <div class="panel-body">
+            <p>Automatically handles HTTP 402 challenge negotiation, EIP-712 signing, and retry seamlessly:</p>
+            <div class="code-block-container">
+              <pre><code class="language-typescript">import { x402Client } from 'synapse402-sdk';
+
+// Initialize with agent private key or session key
+const client = new x402Client({
+  privateKey: process.env.AGENT_PRIVATE_KEY,
+  rpcUrl: 'https://sepolia.base.org'
+});
+
+// Automatic x402 handling:
+// 1. Sends request -> gets 402 Challenge
+// 2. Signs EIP-712 payment voucher autonomously
+// 3. Retries with X-Payment header -> returns 200 data!
+const response = await client.fetch('https://api.synapse402.org/api/x402/intel/deepseek-financial?symbol=NVDA');
+const intelligence = await response.json();
+console.log('Unlocked Quant Signal:', intelligence.data);</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Server Middleware Integration -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3><i data-lucide="shield"></i> Server Side: 1-Line Endpoint Protection</h3>
+            <span class="badge badge-blue">Express / Node.js</span>
+          </div>
+          <div class="panel-body">
+            <p>Monetize any route by adding the <code>x402Guard</code> middleware:</p>
+            <div class="code-block-container">
+              <pre><code class="language-javascript">const express = require('express');
+const { x402Guard } = require('synapse402/middleware');
+
+const app = express();
+
+// Guard route with 0.005 USDC paywall
+app.get('/api/premium-ai-tool', 
+  x402Guard({ 
+    amount: 0.005, 
+    payee: '0xYourWalletAddress...',
+    name: 'Premium AI Tool'
+  }), 
+  (req, res) => {
+    // Access unlocked only after x402 settlement!
+    res.json({ message: 'Premium compute served!', receipt: req.x402.receipt });
+  }
+);</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why x402 is superior architecture -->
+      <div class="panel comparison-panel">
+        <div class="panel-header">
+          <h3>Why x402 Changes the Agentic Internet Forever</h3>
+        </div>
+        <div class="panel-body">
+          <div class="comparison-grid">
+            <div class="comparison-col traditional">
+              <h4>❌ Traditional Web (Web2 SaaS)</h4>
+              <ul>
+                <li>Requires human signup with email, password & 2FA</li>
+                <li>Credit card required ($30 - $200/mo minimum tiers)</li>
+                <li>API keys leak and require manual rotation</li>
+                <li>Impossible for autonomous agents to purchase spontaneously</li>
+                <li>High chargeback fraud and payment gateway fees (3%)</li>
+              </ul>
+            </div>
+            <div class="comparison-col x402-col">
+              <h4>✅ x402 Protocol Mesh (Web3 Native)</h4>
+              <ul>
+                <li><strong>Zero Accounts:</strong> Pure HTTP request/response handshake</li>
+                <li><strong>True Pay-per-Call:</strong> $0.001 - $0.02 per request in USDC</li>
+                <li><strong>Machine-Ready:</strong> Cryptographically signed by agent wallet</li>
+                <li><strong>Sub-50ms Settlement:</strong> Low-cost L2 settlement on Base</li>
+                <li><strong>Composable:</strong> Agents pay agents without middlemen</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: Publish Custom x402 Endpoint -->
+  <div class="modal-overlay" id="publishModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i data-lucide="plus-circle"></i> Monetize New API Endpoint</h3>
+        <button class="modal-close-btn" id="btnClosePublishModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="publishApiForm">
+          <div class="form-group">
+            <label>API Service Name</label>
+            <input type="text" id="pubName" class="form-input" placeholder="e.g. LLM Code Vulnerability Exploit Detector" required>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <input type="text" id="pubCategory" class="form-input" placeholder="e.g. AI Security, Financial, Spatial Data" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>API Path (e.g. /api/x402/custom/my-tool)</label>
+              <input type="text" id="pubEndpoint" class="form-input" placeholder="/api/x402/custom/crypto-sentiment" required>
+            </div>
+            <div class="form-group">
+              <label>Cost per Request (USDC)</label>
+              <input type="number" step="0.001" id="pubPrice" class="form-input" value="0.010" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Payee Wallet (Base Sepolia Address)</label>
+            <input type="text" id="pubPayee" class="form-input mono" placeholder="0x..." value="0x4029D8872bF00cA2343E65B9e01103D3b1F89402" required>
+          </div>
+          <div class="form-group">
+            <label>Service Description</label>
+            <textarea id="pubDesc" class="form-textarea" rows="2" placeholder="Describe the compute or data provided by this endpoint" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Sample Response Payload (JSON)</label>
+            <textarea id="pubResponse" class="form-textarea mono" rows="3">{"status":"success","score":0.95,"intel":"Verified signal payload"}</textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btnCancelPublish">Cancel</button>
+            <button type="submit" class="btn btn-primary"><i data-lucide="upload"></i> Deploy Protected x402 Endpoint</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Faucet Top Up -->
+  <div class="modal-overlay" id="faucetModal" style="display: none;">
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <h3><i data-lucide="coins"></i> Agent Wallet Testnet Faucet</h3>
+        <button class="modal-close-btn" id="btnCloseFaucetModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Grant testnet USDC on Base Sepolia directly to the Agent Smart Account to continue autonomous mission executions.</p>
+        <div class="faucet-preset-grid">
+          <button class="faucet-amount-chip active" data-amt="2.000">+2.00 USDC</button>
+          <button class="faucet-amount-chip" data-amt="5.000">+5.00 USDC</button>
+          <button class="faucet-amount-chip" data-amt="10.000">+10.00 USDC</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelFaucet">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btnExecuteFaucet"><i data-lucide="zap"></i> Claim USDC Faucet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- App Script -->
+  <script src="js/app.js"></script>
+</body>
+</html>
